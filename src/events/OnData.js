@@ -2,6 +2,7 @@ import { config } from "../config/config.js";
 import { PACKET_TYPE } from "../constants/header.js";
 import { getHandlerById } from "../handlers/index.js";
 import { getUserById } from "../session/user.session.js";
+import { CustomError } from "../utils/error/customError.js";
 import { ErrorCodes } from "../utils/error/errorCodes.js";
 import { handlerError } from "../utils/error/errorHandler.js";
 import { packetParser } from "../utils/parser/packetParser.js";
@@ -51,7 +52,7 @@ export const onData = (socket) => async (data) => {
           break;
       }
     } catch (err) {
-      handlerError(socket, e);
+      handlerError(socket, err);
     }
   }
 };

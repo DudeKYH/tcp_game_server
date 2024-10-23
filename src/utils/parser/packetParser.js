@@ -1,5 +1,7 @@
+import { config } from "../../config/config.js";
 import { getProtoTypeNameByHandlerId } from "../../handlers/index.js";
 import { getProtoMessages } from "../../init/loadProtos.js";
+import { CustomError } from "../error/customError.js";
 import { ErrorCodes } from "../error/errorCodes.js";
 
 export const packetParser = (data) => {

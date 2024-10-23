@@ -2,17 +2,31 @@ import {
   HANDLER_IDS,
   RESPONSE_SUCCESS_CODE,
 } from "../../constants/handlerIds.js";
+import {
+  craeteUser,
+  findUserByDeviceId,
+  updateUserLogin,
+} from "../../db/user/user.db.js";
+import { addUser } from "../../session/user.session.js";
 import { createResponse } from "../../utils/response/createResponse.js";
 
-const initialHandler = async (socket, userId, payload) => {
+const initialHandler = async ({ socket, userId, payload }) => {
   const { deviceId } = payload;
 
-  addUser(socket, deviceId);
+  let user = await findUserByDeviceId(deviceId);
+
+  if (!user) {
+    user = await craeteUser(deviceId);
+  } else {
+    await updateUserLogin(user.id);
+  }
+
+  addUser(socket, user.id);
 
   const initialResponse = createResponse(
     HANDLER_IDS.INITIAL,
     RESPONSE_SUCCESS_CODE,
-    { userId: deviceId },
+    { userId: user.id },
     deviceId,
   );
 
