@@ -14,6 +14,30 @@ const makeNotofication = (message, type) => {
   return Buffer.concat([packetLength, packetType, message]);
 };
 
+export const createLocationPacket = (users) => {
+  const protoMessages = getProtoMessages();
+
+  const location = protoMessages.gameNotification.UpdateLocation;
+
+  const payload = { users };
+  const message = location.create(payload);
+
+  const locationPacket = location.encode(message).finish();
+  return makeNotofication(locationPacket, PACKET_TYPE.LOCATION);
+};
+
+export const createGameStartPacket = (gameId, timestamp) => {
+  const protoMessages = getProtoMessages();
+
+  const start = protoMessages.gameNotification.Start;
+
+  const payload = { gameId, timestamp };
+  const message = start.create(payload);
+
+  const startPacket = start.encode(message).finish();
+  return makeNotofication(startPacket, PACKET_TYPE.GAME_START);
+};
+
 export const createPingPacket = (timestamp) => {
   const protoMessages = getProtoMessages();
 

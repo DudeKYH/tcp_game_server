@@ -24,8 +24,8 @@ export const onData = (socket) => async (data) => {
     }
     const packet = socket.buffer.slice(totalHeaderLength, length);
     socket.buffer = socket.buffer.slice(length);
-    console.log(`length: ${length}, packetType: ${packetType}`);
-    console.log(`packet: ${packet}`);
+    //console.log(`length: ${length}, packetType: ${packetType}`);
+    //console.log(`packet: ${packet}`);
 
     try {
       switch (packetType) {
@@ -63,7 +63,7 @@ export const onData = (socket) => async (data) => {
 
             await handler({ socket, userId, payload });
 
-            console.log(handlerId, userId, payload, sequence);
+            //console.log(handlerId, userId, payload, sequence);
           }
           break;
       }
