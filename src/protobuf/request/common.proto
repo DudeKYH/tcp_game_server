@@ -9,3 +9,7 @@ message Packet {
     uint32 sequence = 4;
     bytes payload = 5;
 }
+
+message Ping {
+    int64 timestamp = 1;
+}

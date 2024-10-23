@@ -1,7 +1,8 @@
 import { config } from "../config/config.js";
 import { PACKET_TYPE } from "../constants/header.js";
 import { getHandlerById } from "../handlers/index.js";
-import { getUserById } from "../session/user.session.js";
+import { getProtoMessages } from "../init/loadProtos.js";
+import { getUserById, getUserBySocket } from "../session/user.session.js";
 import { CustomError } from "../utils/error/customError.js";
 import { ErrorCodes } from "../utils/error/errorCodes.js";
 import { handlerError } from "../utils/error/errorHandler.js";
@@ -29,6 +30,21 @@ export const onData = (socket) => async (data) => {
     try {
       switch (packetType) {
         case PACKET_TYPE.PING:
+          {
+            const protoMessages = getProtoMessages();
+            const ping = protoMessages.common.Ping;
+            const pingMessage = ping.decode(packet);
+
+            const user = getUserBySocket(socket);
+            if (!user) {
+              throw new CustomError(
+                ErrorCodes.USER_NOT_FOUND,
+                "유저를 찾을 수 없습니다.",
+              );
+            }
+
+            user.handlePong(pingMessage);
+          }
           break;
         case PACKET_TYPE.NORMAL:
           {
